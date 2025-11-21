@@ -2,8 +2,8 @@
 // config/db_config.php
 $DB_HOST = '127.0.0.1';
 $DB_NAME = 'restaurant_db';
-$DB_USER = 'dbuser';
-$DB_PASS = 'dbpass';
+$DB_USER = 'root';
+$DB_PASS = '';
 
 
 try {
