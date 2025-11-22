@@ -1,9 +1,9 @@
 <?php
 // config/db_config.php
-$DB_HOST = '127.0.0.1';
-$DB_NAME = 'restaurant_db';
-$DB_USER = 'root';
-$DB_PASS = '';
+$DB_HOST = 'db.zjxpkvsquiaznyvsjzpo.supabase.co';
+$DB_NAME = 'postgres';
+$DB_USER = 'postgres';
+$DB_PASS = 'Spaul4443370.';
 
 
 try {
