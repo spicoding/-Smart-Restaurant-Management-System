@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Waiter Portal | DineEase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --brand: #E85D46; --accent: #FE9C00; --bg: #f4f7f6; --text: #333; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+        
+        .navbar { background: var(--brand); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .container { padding: 20px; max-width: 600px; margin: 0 auto; }
+        
+        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .card h3 { margin: 0 0 10px 0; display: flex; justify-content: space-between; }
+        
+        .status-pill { padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
+        .ready { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; animation: pulse 2s infinite; }
+        .preparing { background: #fff3cd; color: #856404; }
+        
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); } 100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); } }
+
+        .fab { position: fixed; bottom: 20px; right: 20px; background: var(--accent); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(254, 156, 0, 0.4); cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div style="font-weight:bold;"><i class="fas fa-user-tie"></i> My Tables</div>
+        <div id="waiterName">Alice</div> <!-- Hardcoded for demo, normally from login -->
+    </div>
+
+    <div class="container" id="orderList">
+        <!-- JS Populated -->
+    </div>
+
+    <!-- Floating Action Button for New Order -->
+    <div class="fab" onclick="alert('Open New Order Form')"><i class="fas fa-plus"></i></div>
+
+    <script>
+        const myName = "Alice"; // Simulating logged in user
+
+        function loadData() { return JSON.parse(localStorage.getItem('srms_data') || '{"orders":[]}'); }
+        function saveData(data) { localStorage.setItem('srms_data', JSON.stringify(data)); window.dispatchEvent(new Event('storage')); }
+
+        function renderWaiter() {
+            const data = loadData();
+            const list = document.getElementById('orderList');
+            list.innerHTML = '';
+
+            // Filter orders for this waiter
+            const myOrders = data.orders.filter(o => o.waiter === myName && o.status !== 'completed');
+
+            if (myOrders.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#999; margin-top:50px;">No active orders. Good job!</p>';
+                return;
+            }
+
+            myOrders.forEach(order => {
+                let kStatus = `<span class="status-pill ${order.kitchenStatus}">${order.kitchenStatus.toUpperCase()}</span>`;
+                let bStatus = `<span class="status-pill ${order.barStatus}">${order.barStatus.toUpperCase()}</span>`;
+
+                // If ready, show Deliver button
+                let actionBtn = '';
+                if (order.kitchenStatus === 'ready' || order.barStatus === 'ready') {
+                    actionBtn = `<button onclick="markDelivered(${order.id})" style="width:100%; padding:10px; background:var(--brand); color:white; border:none; border-radius:5px; margin-top:10px;">Mark Delivered</button>`;
+                }
+
+                list.innerHTML += `
+                    <div class="card">
+                        <h3>Table ${order.tableId} <span style="font-size:0.9rem; color:#777">#${order.id}</span></h3>
+                        <p>${order.items}</p>
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            <div>Kitchen: ${kStatus}</div>
+                            <div>Bar: ${bStatus}</div>
+                        </div>
+                        ${actionBtn}
+                    </div>
+                `;
+            });
+        }
+
+        function markDelivered(orderId) {
+            const data = loadData();
+            const order = data.orders.find(o => o.id === orderId);
+            if(order) {
+                if(order.kitchenStatus === 'ready') order.kitchenStatus = 'served';
+                if(order.barStatus === 'ready') order.barStatus = 'served';
+                saveData(data);
+                renderWaiter();
+            }
+        }
+
+        window.addEventListener('storage', renderWaiter);
+        renderWaiter();
+    </script>
+</body>
+</html>

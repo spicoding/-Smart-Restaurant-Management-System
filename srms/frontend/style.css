@@ -2,12 +2,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 :root{
-  --brand-1:#116466;
-  --brand-2:#3AAFA9;
+  --brand-1:#E85D46;
+  --brand-2:#C6AD67;
   --accent:#FE9C00;
   --muted:#7a7a7a;
   --bg:#f7f8f9;
 }
+ 
+
 
 *{box-sizing:border-box}
 body{font-family:'Poppins',sans-serif;margin:0;background:var(--bg);color:#222}
@@ -15,7 +17,7 @@ a{color:inherit;text-decoration:none}
 
 /* header */
 .header {
-  background: linear-gradient(135deg,var(--brand-1),#2b7a78);
+  background: linear-gradient(135deg,var(--brand-1),);
   color:white;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;
 }
 .header .brand{font-weight:600;font-size:1.2rem}

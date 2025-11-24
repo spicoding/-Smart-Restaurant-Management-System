@@ -65,7 +65,30 @@
       const validCodes = STAFF_CODES[role] || {};
       if(validCodes[code] && validCodes[code] === name){
         localStorage.setItem('sr_staff', JSON.stringify({name, role, code}));
-        window.location.href = 'staff.html';
+       
+      let redirectPage = '';
+
+      switch(role){
+        case 'manager':
+          redirectPage = '../admin/admin.html';
+          break;
+        case 'cashier':
+          redirectPage = 'cashier.html';
+          break;
+        case 'waiter':
+          redirectPage = 'waiter.html';
+          break;
+        case 'kitchen':
+          redirectPage = 'kitchen.html';
+          break;
+        case 'bar':
+          redirectPage = 'bar.html';
+          break;
+        default:
+          redirectPage = 'staff.html';
+      }
+
+      window.location.href = redirectPage;
       } else {
         alert("Invalid code or name for selected role.");
       }
